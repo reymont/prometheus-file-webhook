@@ -1,2 +1,4 @@
 package-lock.json
-
+/.idea/
+logs/*.log
+*.7z

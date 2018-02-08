@@ -1,0 +1,16 @@
+{
+    "phone": {
+        "file_path": "./logs/",
+        "file_name": "remark.log",
+        "port": "8188",
+        "nums": ["18600000001", "18600000002", "18600000003"]
+    },
+    "mail": {
+        "host": "smtp.163.com",
+        "port": 25,
+        "user": "***@163.com",
+        "pass": "***",
+        "receivers": "***@163.com",
+        "subject": "告警邮件主题"
+    }
+}

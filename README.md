@@ -7,6 +7,7 @@
 yum install -y nodejs
 # 执行应用
 cd prometheus-file-webhook
+mv config.example.json config.json
 node node.js
 ```
 
@@ -17,7 +18,7 @@ node node.js
 ```json
 {
     "file_path":"./logs/",//生成短信日志目录
-    "file_name":"remark.log",//生成端口文件名称
+    "file_name":"remark.log",//生成短信日志文件名称
     "port":"8188",//prometheus-file-webhook端口
     "phone":"18600000000"//接收短信的手机号
 }

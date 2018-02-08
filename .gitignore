@@ -2,3 +2,5 @@ package-lock.json
 /.idea/
 logs/*.log
 *.7z
+/node_modules/
+config.json

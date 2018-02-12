@@ -1,10 +1,13 @@
 {
+    "prom_server": "http://172.20.62.122:9090",
+    "isSms": true,
     "phone": {
         "file_path": "./logs/",
         "file_name": "remark.log",
         "port": "8188",
         "nums": ["18600000001", "18600000002", "18600000003"]
     },
+    "isMail": true,
     "mail": {
         "host": "smtp.163.com",
         "port": 25,

@@ -8,6 +8,15 @@ yum install -y nodejs
 # 执行应用
 cd prometheus-file-webhook
 mv config.example.json config.json
+
+# 邮件
+npm install nodemailer
+npm install nodemailer-smtp-transport
+# 时间
+npm install moment
+npm install string
+
+# 执行程序
 node node.js
 ```
 

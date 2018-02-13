@@ -75,7 +75,7 @@ function getPromValue(result) {
     }
 
     var queryStr = S(metrix).between('', postfix).s;
-    const url = config.prom_server + "/api/v1/query?query=sum(" + queryStr + ")"
+    const url = config.prom_server + "/api/v1/query?query=sum\(" + queryStr + "\)"
     console.log("query url: " + url);
     http.get(url, (res) => {
         var html = ""

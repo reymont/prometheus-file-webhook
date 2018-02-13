@@ -26,10 +26,23 @@ node node.js
 
 ```json
 {
-    "file_path":"./logs/",//生成短信日志目录
-    "file_name":"remark.log",//生成短信日志文件名称
-    "port":"8188",//prometheus-file-webhook端口
-    "phone":"18600000000"//接收短信的手机号
+    "prom_server": "http://172.20.62.122:9090",
+    "isSms": true,
+    "phone": {
+        "file_path": "./logs/",
+        "file_name": "remark.log",
+        "port": "8188",
+        "nums": ["18600000001", "18600000002", "18600000003"]
+    },
+    "isMail": true,
+    "mail": {
+        "host": "smtp.163.com",
+        "port": 25,
+        "user": "***@163.com",
+        "pass": "***",
+        "receivers": "***@163.com",
+        "subject": "告警邮件主题"
+    }
 }
 ```
 

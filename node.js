@@ -23,7 +23,14 @@ function sendMail(result, promValue) {
                 promValue
             );
     }
-    sendMailService.sendmail(config.mail.receivers, config.mail.subject, remark);
+    var alertSubject = config.mail.subject;
+    if (result.status == "resolved") {
+        alertSubject = alertSubject + "-告警解决";
+    } else if (result.status == "firing") {
+        alertSubject = alertSubject + "-触发告警";
+    }
+
+    sendMailService.sendmail(config.mail.receivers, alertSubject, remark);
 }
 
 // 生成短信文本
@@ -40,11 +47,17 @@ function generateSmsTxt(result, promValue) {
     for (var j = 0; j < config.phone.nums.length; j++) {
         var remark = "86\t" + config.phone.nums[j] + "\t";
         for (var i = 0; i < arr.length; i++) {
-            remark += "疑似异常提醒：" + moment(date).format('YYYY年MM月DD日') + "，" +
+
+            remark += moment(date).format('YYYY年MM月DD日') + "，" +
                 util.format(arr[i].annotations.summary,
                     moment(date).format('HH时') + '-' + moment(date).add(1, 'hours').format('HH时'),
                     promValue
                 );
+            if (result.status == "resolved") {
+                remark = "异常解决通知：" + remark;
+            } else if (result.status == "firing") {
+                remark = "疑似异常提醒：" + remark;
+            }
         }
         fs.appendFile(config.phone.file_path + fileName, remark + '\n', 'utf8', function (err) {
             if (err) {

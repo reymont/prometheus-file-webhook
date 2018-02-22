@@ -1,7 +1,7 @@
 var date = new Date()
 console.log(new Date())
 var path = require('path');
-var config = require('./config.json');
+var config = require('../config.json');
 
 var moment = require('moment');
 console.log(moment(date).format('YYYY-MM-DD'));
@@ -19,3 +19,6 @@ console.log(path.basename(config.phone.file_name, path.extname(config.phone.file
 // 2018年2月7日，9时-10时 较上周同日同时段环比降低（提升）120%。
 console.log(moment(date).format('YYYY年MM月DD日'))
 console.log(moment(date).format('HH时') + '-' + moment(date).add(1,'hours').format('HH时'))
+
+console.log(moment().format('YYYYMMDDHHmmss'))
+console.log(moment().format('YYYYMMDD'))

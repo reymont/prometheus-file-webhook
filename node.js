@@ -52,13 +52,6 @@ function generateSmsTxt(result, promValue) {
             }
         });
     }
-
-    // 记录原始告警日志
-    fs.appendFile("./logs/alerts.log", result + '\n', 'utf8', function (err) {
-        if (err) {
-            console.log(err.message);
-        }
-    });
 }
 
 // 根据标签从prmetheus获取数据
@@ -137,26 +130,39 @@ mkdir('./logs/')
 mkdir(config.phone.file_path)
 
 http.createServer(function (req, res) {
-    console.log('Request Received');
-    var body = '';
+    try {
+        console.log('Request Received');
+        var body = '';
 
-    res.writeHead(200, {
-        'Context-Type': 'text/plain',
-        'Access-Control-Allow-Origin': '*'
-    });
+        res.writeHead(200, {
+            'Context-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*'
+        });
 
-    req.on('data', function (chunk) {
-        body += chunk;
-    });
+        req.on('data', function (chunk) {
+            body += chunk;
+        });
 
-    req.on('end', function () {
-        var result = JSON.parse(body);
-        console.log(result);
+        req.on('end', function () {
+            var result = JSON.parse(body);
 
-        getPromValue(result);
+            var logFileName = path.basename(config.phone.file_name, path.extname(config.phone.file_name)) +
+                '-' + moment().format('YYYYMMDDHHmmss') + path.extname(config.phone.file_name);
 
-        res.end('{"msg": "OK"}');
-    })
+            // 记录原始告警日志
+            fs.appendFile("./logs/alerts.log." + moment().format('YYYYMMDD'), JSON.stringify(result, null, 4) + '\n', 'utf8', function (err) {
+                if (err) {
+                    console.log(err.message);
+                }
+            });
+
+            getPromValue(result);
+
+            res.end('{"msg": "OK"}');
+        })
+    } catch (e) {
+        console.log(`获取数据失败: ${e.message}`)
+    }
 
 }).listen(port, ip);
 console.log('Server running at http://' + ip + ':' + port);

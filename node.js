@@ -19,10 +19,11 @@ function sendMail(result, promValue) {
         // remark += arr[i].annotations.summary;
         remark += "温馨提醒：" + moment(date).format('YYYY年MM月DD日') + "，" +
             util.format(arr[i].annotations.summary,
-                moment(date).format('HH时') + '-' + moment(date).add(1, 'hours').format('HH时'),
+                moment(date).format('HH时') + '~' + moment(date).add(1, 'hours').format('HH时'),
                 promValue
             );
     }
+    remark = remark.replace("-","");
     var alertSubject = config.mail.subject;
     if (result.status == "resolved") {
         alertSubject = alertSubject + "-告警解决";
@@ -50,9 +51,10 @@ function generateSmsTxt(result, promValue) {
 
             remark += moment(date).format('YYYY年MM月DD日') + "，" +
                 util.format(arr[i].annotations.summary,
-                    moment(date).format('HH时') + '-' + moment(date).add(1, 'hours').format('HH时'),
+                    moment(date).format('HH时') + '~' + moment(date).add(1, 'hours').format('HH时'),
                     promValue
                 );
+            remark = remark.replace("-","");
             if (result.status == "resolved") {
                 remark = "异常解决通知：" + remark;
             } else if (result.status == "firing") {

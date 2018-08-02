@@ -55,11 +55,6 @@ function generateSmsTxt(result, promValue) {
                     promValue
                 );
             remark = remark.replace("-","");
-            if (result.status == "resolved") {
-                remark = "异常解决通知：" + remark;
-            } else if (result.status == "firing") {
-                remark = "疑似异常提醒：" + remark;
-            }
         }
         fs.appendFile(config.phone.file_path + fileName, remark + '\n', 'utf8', function (err) {
             if (err) {
@@ -69,7 +64,9 @@ function generateSmsTxt(result, promValue) {
     }
 }
 
-// 根据标签从prmetheus获取数据
+// 根据标签从prometheus获取数据
+// jtp_sms_send_sms_greater_than_2 处理成 jtp。2018/08/02
+// https://www.npmjs.com/package/string
 function getPromValue(result) {
     var metrix = result.groupLabels.alertname;
     var postfix = "_mail";
@@ -92,24 +89,28 @@ function getPromValue(result) {
         })
 
         res.on("end", () => {
-            var promResult = JSON.parse(html);
-            var promValue;
-            if (promResult.data) {
-                if (promResult.data.result) {
-                    if (promResult.data.result[0].value) {
-                        promValue = promResult.data.result[0].value[1];
+            try {
+                var promResult = JSON.parse(html);
+                var promValue;
+                if (promResult.data) {
+                    if (promResult.data.result) {
+                        if (promResult.data.result[0].value) {
+                            promValue = promResult.data.result[0].value[1];
+                        }
                     }
                 }
-            }
 
-            // 发邮件
-            if (config.isMail && result.groupKey.indexOf("_mail") >= 0) {
-                sendMail(result, promValue);
-            }
+                // 发邮件
+                if (config.isMail && result.groupKey.indexOf("_mail") >= 0) {
+                    sendMail(result, promValue);
+                }
 
-            // 生成短信文本
-            if (config.isSms && result.groupKey.indexOf("_sms") >= 0) {
-                generateSmsTxt(result, promValue)
+                // 生成短信文本
+                if (config.isSms && result.groupKey.indexOf("_sms") >= 0) {
+                    generateSmsTxt(result, promValue)
+                }
+            } catch (e) {
+                console.log(e.message)
             }
         })
     }).on("error", (e) => {

@@ -9,6 +9,7 @@
   },
   "author": "",
   "dependencies": {
+    "forever": "^0.15.3",
     "moment": "^2.20.1",
     "nodemailer": "^4.4.2",
     "nodemailer-smtp-transport": "^2.7.4",
